@@ -1,0 +1,41 @@
+# 🐍 Python Backend
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.db
+*.log
+.env
+config.ini
+instance/
+venv/
+.envrc
+
+# 📦 Node.js / React Frontend
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+build/
+dist/
+.cache
+coverage/
+
+# 💻 IDE / Editor Files
+.vscode/
+.idea/
+*.iml
+
+# 📷 Media / Large Files
+.DS_Store
+Thumbs.db
+
+# 🐳 Docker
+docker-compose.override.yml
+
+# 🚀 Deployment
+*.pem
+*.key
