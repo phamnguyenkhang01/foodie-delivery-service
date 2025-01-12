@@ -32,4 +32,4 @@ python manage.py flush
 
 
 1. Fix Order Create: Price nên link giữa Order Item model và MenuItem model, tính tiền bằng công thức không phải hardcode
-2. Order Update: chưa làm được test case: update một id có sẵn thi nó lại xóa id đó, tạo id mới. delete bằng cách chuyển quantity về bằng 0
+2. Order Update: chưa làm được test case: update một id có sẵn thi nó lại xóa id đó, tạo id mới. delete bằng cách chuyển quantity về bằng 0 --DONE
