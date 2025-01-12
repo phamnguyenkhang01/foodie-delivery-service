@@ -157,26 +157,26 @@ def delete_order(request, order_id):
     except Order.DoesNotExist:
         return Response({"error": "Order not found."}, status=status.HTTP_404_NOT_FOUND)
 
-# Update an Order
 @api_view(['PUT', 'PATCH'])
 def update_order(request, order_id):
     try:
         order = Order.objects.get(pk=order_id)
-
+    
     except Order.DoesNotExist:
         return Response({"error": "Order not found."}, status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'PUT':
-        print("Line 164: ", order)
-        print("Line 165: ", request.data)
-        serializer = OrderUpdateSerializer(order, data=request.data)
-    elif request.method == 'PATCH':
-        serializer = OrderUpdateSerializer(order, data=request.data, partial=True)
     
+    if request.method == 'PUT':
+        serializer = OrderUpdateSerializer(order, data=request.data)
+    # elif request.method == 'PATCH':
+    #     serializer = OrderUpdateSerializer(order, data=request.data, partial=True)
+
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+        
 
 
     

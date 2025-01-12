@@ -18,7 +18,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         
     def to_internal_value(self, data):
         internal_value = super().to_internal_value(data)
-        internal_value['id'] = data.get('id')  # Explicitly include `id`
+        internal_value['id'] = data.get('id')
         return internal_value
         
 
@@ -46,30 +46,30 @@ class OrderUpdateSerializer (serializers.ModelSerializer):
         model = Order
         fields = ['order_id', 'restaurant', 'customer_name', 'customer_address', 'customer_phone', 'status', 'total_price', 'created_at', 'updated_at', 'order_items']
     def update(self, instance, validated_data):
-        print("Line 44: ", validated_data.get('order_items', []))
         # Extract nested order_items data
         order_items_data = validated_data.pop('order_items', [])
-        print("\n\nLine 46: ", validated_data)
-        print("\n\nLine 47:", order_items_data)
-        print("Line 51: ", instance)
         
         # Update the main Order fields
-
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
-        print("Line 55: ", instance)
 
         # Update, create, or delete order_items
         existing_items = {item.id: item for item in instance.order_items.all()}  # Get all current items
         received_ids = []
 
         for item_data in order_items_data:
-            print("Line 61: ", order_items_data)
-            print("Line 62: ", item_data)
             item_id = item_data.get('id')  # Check if the item has an ID
+            quantity = item_data.get('quantity', 0)  # Get the quantity of the item
+
+            if quantity == 0:  # If quantity is 0, delete the item
+                if item_id and item_id in existing_items:
+                    print(f"Deleting item with ID {item_id} because quantity is 0")
+                    # Ensure the item has a valid ID before deleting
+                    existing_items[item_id].delete()
+                continue  # Skip further processing for this item
+
             if item_id and item_id in existing_items:
-                print("line 64: ", item_id)
                 # Update existing item
                 existing_item = existing_items[item_id]
                 for attr, value in item_data.items():
@@ -78,7 +78,6 @@ class OrderUpdateSerializer (serializers.ModelSerializer):
                 received_ids.append(item_id)
             else:
                 # Create a new item
-                print("line 73: ", item_id)
                 new_item = OrderItem.objects.create(order=instance, **item_data)
                 received_ids.append(new_item.id)
 
