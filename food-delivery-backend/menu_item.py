@@ -1,13 +1,11 @@
-# menu_item.py
+from django.db import models
 
-class MenuItem:
-    def __init__(self, item_id, restaurant_id, name, description, price, image_url):
-        self.item_id = item_id
-        self.restaurant_id = restaurant_id
-        self.name = name
-        self.description = description
-        self.price = price
-        self.image_url = image_url
+class MenuItem(models.Model):
+    restaurant_id = models.IntegerField()
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    image_url = models.URLField(blank=True)
 
-    def __repr__(self):
-        return f"MenuItem({self.item_id}, {self.restaurant_id}, '{self.name}', '{self.description}', {self.price}, '{self.image_url}')"
+    def __str__(self):
+        return f"{self.name} (Restaurant ID: {self.restaurant_id})"

@@ -1,0 +1,56 @@
+# Import the models
+from restaurants.models import Restaurant, MenuItem, Order, OrderItem
+from django.utils import timezone
+
+# Create Restaurant instances
+burger_palace = Restaurant.objects.create(restaurant_id=101, name="Burger Palace", address="123 Burger St")
+pizza_paradise = Restaurant.objects.create(restaurant_id=102, name="Pizza Paradise", address="456 Pizza Ave")
+pasta_sweet_heaven = Restaurant.objects.create(restaurant_id=103, name="Pasta Sweet Heaven", address="7893 Pasta Blvd")
+
+# Create MenuItem instances
+cheeseburger = MenuItem.objects.create(name="Cheeseburger", description="Juicy beef patty with cheese", price="5.99", image_url="https://example.com/images/cheeseburger.jpg", restaurant_id=burger_palace)
+veggie_pizza = MenuItem.objects.create(name="Veggie Pizza", description="Delicious pizza with fresh vegetables", price="8.99", image_url="https://example.com/images/veggie-pizza.jpg", restaurant_id=burger_palace)
+chicken_sandwich = MenuItem.objects.create(name="Chicken Sandwich", description="Grilled chicken with lettuce and mayo", price="6.49", image_url="https://example.com/images/chicken-sandwich.jpg", restaurant_id=pizza_paradise)
+pasta = MenuItem.objects.create(name="Pasta", description="Pasta with tomato sauce and basil", price="7.99", image_url="https://example.com/images/pasta.jpg", restaurant_id=pasta_sweet_heaven)
+
+# Create Order instance
+order1 = Order.objects.create(restaurant=burger_palace, customer_name="John Doe", customer_address="789 Customer St", customer_phone="1234567890", total_price="5.99")
+
+# Create OrderItem instances
+OrderItem.objects.create(order=order1, menu_item=cheeseburger, quantity=1, price=cheeseburger.price)
+
+order2 = Order.objects.create(
+    restaurant=burger_palace,
+    customer_name="Jane Smith",
+    customer_address="456 Customer Ln",
+    customer_phone="0987654321",
+    total_price="29.45"
+)
+
+# Add multiple items with quantities to the order
+OrderItem.objects.create(order=order2, menu_item=cheeseburger, quantity=2, price=cheeseburger.price)
+OrderItem.objects.create(order=order2, menu_item=veggie_pizza, quantity=1, price=veggie_pizza.price)
+OrderItem.objects.create(order=order2, menu_item=chicken_sandwich, quantity=3, price=chicken_sandwich.price)
+OrderItem.objects.create(order=order2, menu_item=pasta, quantity=1, price=pasta.price)
+
+# Print all Restaurant instances
+restaurants = Restaurant.objects.all()
+for restaurant in restaurants:
+    print(f"Restaurant ID: {restaurant.restaurant_id}, Name: {restaurant.name}, Address: {restaurant.address}")
+
+# Print all MenuItem instances
+menu_items = MenuItem.objects.all()
+for menu_item in menu_items:
+    print(f"ID: {menu_item.id}, Name: {menu_item.name}, Description: {menu_item.description}, Price: {menu_item.price}, Restaurant ID: {menu_item.restaurant_id}")
+
+# Print all Order instances
+orders = Order.objects.all()
+for order in orders:
+    print(f"Order ID: {order.order_id}, Restaurant: {order.restaurant.name}, Status: {order.status}, Total Price: {order.total_price}, Created At: {order.created_at}")
+
+# Print all OrderItem instances
+order_items = OrderItem.objects.all()
+for order_item in order_items:
+    print(f"Order ID: {order_item.order_id}, MenuItem: {order_item.menu_item.name}, Quantity: {order_item.quantity}, Price: {order_item.price}")
+
+
