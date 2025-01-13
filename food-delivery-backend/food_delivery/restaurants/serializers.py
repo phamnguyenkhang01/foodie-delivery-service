@@ -15,7 +15,13 @@ class OrderItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderItem
         fields = ['id', 'menu_item', 'quantity', 'price']
+        read_only_fields = ['price']
         
+    def create(self, validated_data):
+        menu_item = validated_data.get('menu_item')
+        validated_data['price'] = menu_item.price
+        return super().create(validated_data
+                              )    
     def to_internal_value(self, data):
         internal_value = super().to_internal_value(data)
         internal_value['id'] = data.get('id')
@@ -29,14 +35,25 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['order_id', 'restaurant', 'customer_name', 'customer_address', 'customer_phone', 'status', 'total_price', 'created_at', 'updated_at', 'order_items']
-    
+        read_only_fields = ['total_price']
+        
     def create(self, validated_data):
         order_items_data = validated_data.pop('order_items')
+        total_price = 0
+        
         order = Order.objects.create(**validated_data)
         
         for item_data in order_items_data:
-            OrderItem.objects.create(order=order, **item_data)
+            menu_item = item_data['menu_item']
+            quantity = item_data['quantity']
+            unit_price = menu_item.price
+            total_price += unit_price * quantity
             
+            OrderItem.objects.create(order=order, menu_item=menu_item, quantity=quantity, price=unit_price)
+            
+        order.total_price = total_price
+        order.save()
+        
         return order
 
 class OrderUpdateSerializer (serializers.ModelSerializer):
@@ -45,6 +62,8 @@ class OrderUpdateSerializer (serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['order_id', 'restaurant', 'customer_name', 'customer_address', 'customer_phone', 'status', 'total_price', 'created_at', 'updated_at', 'order_items']
+        read_only_fields = ['total_price']
+        
     def update(self, instance, validated_data):
         # Extract nested order_items data
         order_items_data = validated_data.pop('order_items', [])
@@ -57,17 +76,19 @@ class OrderUpdateSerializer (serializers.ModelSerializer):
         # Update, create, or delete order_items
         existing_items = {item.id: item for item in instance.order_items.all()}  # Get all current items
         received_ids = []
+        total_price = 0
 
         for item_data in order_items_data:
             item_id = item_data.get('id')  # Check if the item has an ID
             quantity = item_data.get('quantity', 0)  # Get the quantity of the item
-
-            if quantity == 0:  # If quantity is 0, delete the item
+            menu_item = item_data.get('menu_item')
+            
+            if quantity == 0:
                 if item_id and item_id in existing_items:
                     print(f"Deleting item with ID {item_id} because quantity is 0")
-                    # Ensure the item has a valid ID before deleting
+
                     existing_items[item_id].delete()
-                continue  # Skip further processing for this item
+                continue
 
             if item_id and item_id in existing_items:
                 # Update existing item
@@ -76,15 +97,21 @@ class OrderUpdateSerializer (serializers.ModelSerializer):
                     setattr(existing_item, attr, value)
                 existing_item.save()
                 received_ids.append(item_id)
+                total_price += existing_item.quantity * existing_item.price
             else:
                 # Create a new item
-                new_item = OrderItem.objects.create(order=instance, **item_data)
+                price = menu_item.price
+                new_item = OrderItem.objects.create(order=instance,price=price, **item_data)
                 received_ids.append(new_item.id)
+                total_price += new_item.quantity * new_item.price
 
         # Delete items not included in the update request
         for item_id, item in existing_items.items():
             if item_id not in received_ids:
                 item.delete()
+        
+        instance.total_price = total_price
+        instance.save()
 
         return instance
 

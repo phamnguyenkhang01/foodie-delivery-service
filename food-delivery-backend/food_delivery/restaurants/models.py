@@ -48,6 +48,11 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     
+    def save(self, *args, **kwargs):
+        if not self.price:
+            self.price = self.menu_item.price
+        super().save(*args, **kwargs)
+    
     def __str__(self):
         return f"OrderItem(Order ID: {self.order.order_id}, MenuItem: {self.menu_item.name}, Quantity: {self.quantity}, Price: {self.price})"
 

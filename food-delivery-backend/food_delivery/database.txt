@@ -17,7 +17,7 @@ pasta = MenuItem.objects.create(name="Pasta", description="Pasta with tomato sau
 order1 = Order.objects.create(restaurant=burger_palace, customer_name="John Doe", customer_address="789 Customer St", customer_phone="1234567890", total_price="5.99")
 
 # Create OrderItem instances
-OrderItem.objects.create(order=order1, menu_item=cheeseburger, quantity=1, price=cheeseburger.price)
+OrderItem.objects.create(order=order1, menu_item=cheeseburger, quantity=1)
 
 order2 = Order.objects.create(
     restaurant=burger_palace,
@@ -28,10 +28,10 @@ order2 = Order.objects.create(
 )
 
 # Add multiple items with quantities to the order
-OrderItem.objects.create(order=order2, menu_item=cheeseburger, quantity=2, price=cheeseburger.price)
-OrderItem.objects.create(order=order2, menu_item=veggie_pizza, quantity=1, price=veggie_pizza.price)
-OrderItem.objects.create(order=order2, menu_item=chicken_sandwich, quantity=3, price=chicken_sandwich.price)
-OrderItem.objects.create(order=order2, menu_item=pasta, quantity=1, price=pasta.price)
+OrderItem.objects.create(order=order2, menu_item=cheeseburger, quantity=2)
+OrderItem.objects.create(order=order2, menu_item=veggie_pizza, quantity=1)
+OrderItem.objects.create(order=order2, menu_item=chicken_sandwich, quantity=3)
+OrderItem.objects.create(order=order2, menu_item=pasta, quantity=1)
 
 # Print all Restaurant instances
 restaurants = Restaurant.objects.all()
