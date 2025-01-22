@@ -1,10 +1,17 @@
+import React from 'react';
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import './App.css';
-import OrderUpdates from './components/OrderUpdates'
+import RestaurantList from './components/RestaurantList'
+import Navbar from './components/Navbar';
 
 
 function App() {
   return (
-    <OrderUpdates/>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Navbar/>}/>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
