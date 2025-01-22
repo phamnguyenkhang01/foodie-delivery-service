@@ -1,9 +1,14 @@
+cd food-delivery-backend
 .\venv\Scripts\Activate
 cd food_delivery
+python manage.py runserver
+
+cd food-delivery-frontend
+npm start
 
 python main.py
 
-python manage.py runserver
+
 
 
 
