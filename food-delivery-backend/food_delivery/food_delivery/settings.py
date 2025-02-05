@@ -25,8 +25,7 @@ SECRET_KEY = 'django-insecure-e_r2+*tj*ywf_9zmh!i+_!zv20nla3$a$m^00u5g*=we_mvl(%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Application definition
 
@@ -53,9 +52,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS= [
-    "http://localhost:3000"
-]
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 ROOT_URLCONF = 'food_delivery.urls'
 

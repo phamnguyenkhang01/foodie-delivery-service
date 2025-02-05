@@ -1,5 +1,8 @@
 .navbar{
   font-family: 'Arial', sans-serif;
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 15px;
 }
 
 .navbar-button {

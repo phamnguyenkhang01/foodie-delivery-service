@@ -30,3 +30,5 @@ for order in orders:
 
 // Clear database:
 python manage.py flush 
+
+1. Add thêm image vào restaurant trong database
