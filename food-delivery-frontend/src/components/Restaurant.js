@@ -8,7 +8,7 @@ const Restaurant = () => {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/restaurants/get/101/');
+        const response = await fetch('http://127.0.0.1:8000/restaurants/getall/');
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
@@ -32,7 +32,7 @@ const Restaurant = () => {
       <div className="row g-4">
         {restaurants.map((restaurant, index) => (
           <div className="col-md-3 mb-4 d-flex justify-content-center" key={index}>
-            <div className="card" style={{ width: "18rem" }} role="button">
+            <a href={'/store/'+ restaurant.restaurant_id} className="card text-decoration-none" style={{ width: "18rem" }} role="button">
               <img
                 src="./images/food.jpeg"
                 className="card-img-top"
@@ -48,7 +48,7 @@ const Restaurant = () => {
                   {restaurant.name}
                 </h5>
               </div>
-            </div>
+            </a>
           </div>
         ))}
       </div>
