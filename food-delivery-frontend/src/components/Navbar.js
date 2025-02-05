@@ -41,8 +41,6 @@ const Navbar = () => {
           </li>
         </ul>
       </div>
-
-
       {isSidebarOpen && (
         <div
           onClick={toggleSidebar}

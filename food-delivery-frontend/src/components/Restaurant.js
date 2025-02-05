@@ -8,7 +8,7 @@ const Restaurant = () => {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/restaurants/getall/');
+        const response = await fetch('http://127.0.0.1:8000/restaurants/get/101/');
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
